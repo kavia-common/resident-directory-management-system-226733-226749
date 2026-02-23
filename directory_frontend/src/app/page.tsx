@@ -1,9 +1,8 @@
+import { redirect } from "next/navigation";
+
+/**
+ * Root route: redirect to main Residents page.
+ */
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-white flex items-center justify-center">
-      <h1 className="text-black text-4xl font-light">
-        directory_frontend is being generated
-      </h1>
-    </main>
-  );
+  redirect("/residents");
 }
