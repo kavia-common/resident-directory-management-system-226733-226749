@@ -1,1 +1,111 @@
-{"openapi":"3.1.0","info":{"title":"FastAPI","version":"0.1.0"},"paths":{"/":{"get":{"summary":"Health Check","operationId":"health_check__get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}}}}
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Resident Directory Backend API",
+    "description": "FastAPI backend for resident directory management.\n\nAuth: obtain a JWT via POST /auth/login, then call protected endpoints with `Authorization: Bearer <token>`.\n\nRoles:\n- admin: full access\n- viewer: read-only\n",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login (basic auth) and receive a JWT",
+        "description": "Authenticates a user by email/password and returns a JWT access token.",
+        "operationId": "auth_login"
+      }
+    },
+    "/residents": {
+      "get": {
+        "tags": [
+          "residents"
+        ],
+        "summary": "List residents with search and filters",
+        "description": "Supports q (search), building/floor/unit filters, is_active, and pagination.",
+        "operationId": "residents_list"
+      },
+      "post": {
+        "tags": [
+          "residents"
+        ],
+        "summary": "Create resident",
+        "operationId": "residents_create"
+      }
+    },
+    "/residents/{resident_id}": {
+      "get": {
+        "tags": [
+          "residents"
+        ],
+        "summary": "Get resident by id",
+        "operationId": "residents_get"
+      },
+      "put": {
+        "tags": [
+          "residents"
+        ],
+        "summary": "Update resident",
+        "operationId": "residents_update"
+      }
+    },
+    "/residents/{resident_id}/deactivate": {
+      "patch": {
+        "tags": [
+          "residents"
+        ],
+        "summary": "Deactivate resident",
+        "operationId": "residents_deactivate"
+      }
+    },
+    "/residents/{resident_id}/photo": {
+      "post": {
+        "tags": [
+          "residents"
+        ],
+        "summary": "Upload resident photo",
+        "description": "Uploads a photo for a resident and sets photo_url. RBAC: admin.",
+        "operationId": "residents_upload_photo"
+      }
+    },
+    "/residents/export.csv": {
+      "get": {
+        "tags": [
+          "residents"
+        ],
+        "summary": "Export residents to CSV",
+        "description": "Exports residents (optionally filtered) as CSV. RBAC: admin.",
+        "operationId": "residents_export_csv"
+      }
+    },
+    "/residents/import.csv": {
+      "post": {
+        "tags": [
+          "residents"
+        ],
+        "summary": "Import residents from CSV",
+        "description": "CSV columns: full_name, unit, building, floor, phone, email, notes, is_active. If id provided, updates that resident.",
+        "operationId": "residents_import_csv"
+      }
+    },
+    "/audit": {
+      "get": {
+        "tags": [
+          "audit"
+        ],
+        "summary": "List audit log entries",
+        "description": "RBAC: viewer/admin. Returns {items, total, limit, offset}.",
+        "operationId": "audit_list"
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "meta"
+        ],
+        "summary": "Health check",
+        "operationId": "health_check"
+      }
+    }
+  }
+}
